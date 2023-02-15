@@ -1,0 +1,19 @@
+
+header {
+  height: 12vh;
+}
+
+.navbar-item {
+
+}
+
+.navbar-spacer {
+  flex: 1 1 auto;
+}
+
+.content-container {
+  padding: 2%;
+  margin: 2%;
+  background-color: var(--content-container-color);
+  border-radius: 10px;
+}
