@@ -1,10 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Component} from '@angular/core';
 import {io} from "socket.io-client";
 import {BackendStatusInterface} from "../util/BackendStatus.interface";
 import {MeasurementInterface, MeasurementMetadata} from "../util/Measurement.interface";
-import {error} from "@angular/compiler-cli/src/transformers/util";
-import {resolve} from "@angular/compiler-cli";
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +74,30 @@ export class ApiService {
     return new Promise(function (resolve, reject) {
       socket.emit('data:get:allTables', (response: MeasurementMetadata[]) => {
         return resolve(response)
+      })
+    })
+  }
+
+  /**
+   * Settings Actions
+   */
+
+  public async get_all_quick_com_buttons(): Promise<string[]> {
+    let socket = this.socket
+    return new Promise(function (resolve, reject) {
+
+    })
+  }
+
+  public async add_quick_com_button(content: string): Promise<string> {
+    let socket = this.socket
+    return new Promise(function (resolve, reject) {
+      socket.emit('settings:add:commentBtn', (content), (response: string) => {
+        if (response == 'ok') {
+          return resolve('ok')
+        } else {
+          return reject(new Error('error on adding new QuickComBtn'))
+        }
       })
     })
   }

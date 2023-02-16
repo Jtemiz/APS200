@@ -1,9 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('node_modules/bootstrap/dist/css/bootstrap.css');
 :root {
   --font-color-regular: #000000;
   --background-color: rgba(0, 0, 0, 0.09);
   --content-container-color: #f3f3f4;
   --header-background-color: rgba(0, 0, 0, 0.09);
+  --startStop-button-color-regular: rgba(3, 33, 68, 0.9);
+  --comment-button-color-regular: rgba(3, 33, 68, 0.8);
 }
 
 

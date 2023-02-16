@@ -1,1 +1,18 @@
-<p>settings works!</p>
+<mat-form-field>
+  <mat-label>Kommentar hinzufügen</mat-label>
+  <input matInput placeholder="Kommentarinhalt" [(ngModel)]="commentToAdd">
+  <button mat-button matSuffix (click)="addCommentBtn()">check</button>
+</mat-form-field>
+
+<table mat-table class="mat-elevation-z8">
+  <ng-container matColumnDef="content">
+    <th mat-header-cell *matHeaderCellDef>Kommentar</th>
+    <td mat-cell *matCellDef="let element">{{element.content}}</td>
+  </ng-container>
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef>entfernen</th>
+    <td mat-cell *matCellDef="let element"><mat-icon>delete</mat-icon></td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedTableCols"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedTableCols;"></tr>
+</table>
