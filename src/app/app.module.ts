@@ -17,13 +17,16 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
+import { MetadataInputComponent } from './chart/metadata-input.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartComponent,
     SettingsComponent,
-    DataComponent
+    DataComponent,
+    MetadataInputComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import {FormsModule} from "@angular/forms";
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

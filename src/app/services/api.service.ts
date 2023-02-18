@@ -16,9 +16,11 @@ export class ApiService {
     LIMIT_VALUE: 0
   }
 
-  public socket = io("192.168.178.57:5000", {transports: ['websocket']})
+  public socket;
 
   constructor() {
+    this.socket = io("127.0.0.1:5000", {transports: ['websocket']})
+    console.log(this.socket)
     this.socket.on('connect', () => console.log("connected")
     )
     this.socket.on('status', (data) => {
@@ -57,6 +59,18 @@ export class ApiService {
     })
   }
 
+  public set_metadata(name: string, user: string, location: string, notes: string) {
+    this.socket.emit('chart:set:metadata', ({metaData: {
+      name: name,
+      user: user,
+      location: location,
+      notes: notes,
+      time: Date.now().toPrecision()
+    }}), (response: string) => {
+      console.log(response)
+    })
+  }
+
   /**
    * Data Actions
    */
@@ -85,20 +99,26 @@ export class ApiService {
   public async get_all_quick_com_buttons(): Promise<string[]> {
     let socket = this.socket
     return new Promise(function (resolve, reject) {
-
+      socket.emit('settings:get:commentBtns', (response: string[]) => {
+        return resolve(response)
+      })
     })
   }
 
-  public async add_quick_com_button(content: string): Promise<string> {
+  public add_quick_com_button(content: string) {
     let socket = this.socket
-    return new Promise(function (resolve, reject) {
       socket.emit('settings:add:commentBtn', (content), (response: string) => {
-        if (response == 'ok') {
-          return resolve('ok')
-        } else {
-          return reject(new Error('error on adding new QuickComBtn'))
+        if (response === 'error') {
+          // todo generate toastr
         }
-      })
+    })
+  }
+
+  public delete_quick_com_button(content: string) {
+    this.socket.emit('settings:delete:commentBtn', (content), (response: string) => {
+      if (response === 'error') {
+        // todo generate toastr
+      }
     })
   }
 }

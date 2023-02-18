@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Daten zur Messung</h1>
+<div mat-dialog-content>
+  <form>
+    <p>
+    <mat-form-field>
+      <mat-label>Bezeichnung</mat-label>
+      <input matInput [(ngModel)]="metaData.inputName" name="inputUser">
+    </mat-form-field>
+    </p>
+    <p>
+    <mat-form-field>
+      <mat-label>Prüfer</mat-label>
+      <input matInput [(ngModel)]="metaData.inputUser" name="inputUser" placeholder="Vorname, Nachname">
+    </mat-form-field>
+    </p>
+    <p>
+    <mat-form-field>
+      <mat-label>Ort</mat-label>
+      <input matInput [(ngModel)]="metaData.inputLocation" name="inputUser">
+      <button mat-button matSuffix><mat-icon>location_on</mat-icon></button>
+
+    </mat-form-field>
+    </p>
+    <p>
+    <mat-form-field>
+      <mat-label>Notizen</mat-label>
+      <input matInput [(ngModel)]="metaData.inputNotes" name="inputUser" type="text">
+    </mat-form-field>
+    </p>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="updateMetadata()">No Thanks</button>
+  <button mat-button>Ok</button>
+</div>

@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Chart, registerables} from "chart.js";
 import annotationPlugin from 'chartjs-plugin-annotation';
+import {ApiService} from "../services/api.service";
+import {MatDialog} from "@angular/material/dialog";
+import {MetadataInputComponent} from "./metadata-input.component";
 
 Chart.register(annotationPlugin);
 
@@ -10,6 +13,9 @@ Chart.register(annotationPlugin);
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements OnInit {
+  constructor(public apiService: ApiService, public dialog: MatDialog) {
+  }
+
   private changeLimitValue() {
     let input = prompt("Grenzwerte ändern", this.chartAnnotationOptions.value + 'mm');
     if (input != undefined) {
@@ -92,7 +98,6 @@ export class ChartComponent implements OnInit {
         }]
         */
       },
-
       animation: false
     },
   };
@@ -101,5 +106,9 @@ export class ChartComponent implements OnInit {
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
+  }
+
+  public open_metadata_input_dialog() {
+    const dialogRef = this.dialog.open(MetadataInputComponent)
   }
 }
