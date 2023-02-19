@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import _default from "chart.js/dist/plugins/plugin.tooltip";
 import position = _default.defaults.position;
@@ -9,8 +9,8 @@ import {ApiService} from "../services/api.service";
   templateUrl: './metadata-input.component.html',
   styleUrls: ['./metadata-input.component.css']
 })
-export class MetadataInputComponent {
-  metaData = {
+export class MetadataInputComponent implements OnInit{
+  public metaData: any = {
     inputName: '',
     inputUser: '',
     inputLocation: '',
@@ -29,6 +29,16 @@ export class MetadataInputComponent {
   updateMetadata() {
     console.log('updateMetadata')
     this.apiService.set_metadata(this.metaData.inputName, this.metaData.inputUser, this.metaData.inputLocation, this.metaData.inputNotes)
+  }
+
+  saveMetadataToLocalStorage() {
+    localStorage.setItem('metaData', JSON.stringify(this.metaData))
+    console.log(JSON.stringify(this.metaData))
+  }
+
+  ngOnInit(): void {
+    // @ts-ignore
+    this.metaData = localStorage.getItem('metaData') != null ? JSON.parse(localStorage.getItem('metaData')) : this.metaData
   }
  /*
   public getLocation(): Promise<{ longitude: string, latitude: string }> {

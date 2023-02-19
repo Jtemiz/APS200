@@ -4,7 +4,7 @@
     <p>
     <mat-form-field>
       <mat-label>Bezeichnung</mat-label>
-      <input matInput [(ngModel)]="metaData.inputName" name="inputUser">
+      <input matInput [(ngModel)]="metaData.inputName" name="inputName">
     </mat-form-field>
     </p>
     <p>
@@ -16,7 +16,7 @@
     <p>
     <mat-form-field>
       <mat-label>Ort</mat-label>
-      <input matInput [(ngModel)]="metaData.inputLocation" name="inputUser">
+      <input matInput [(ngModel)]="metaData.inputLocation" name="inputLocation">
       <button mat-button matSuffix><mat-icon>location_on</mat-icon></button>
 
     </mat-form-field>
@@ -24,12 +24,13 @@
     <p>
     <mat-form-field>
       <mat-label>Notizen</mat-label>
-      <input matInput [(ngModel)]="metaData.inputNotes" name="inputUser" type="text">
+      <input matInput [(ngModel)]="metaData.inputNotes" name="inputNotes" type="text">
     </mat-form-field>
     </p>
   </form>
 </div>
-<div mat-dialog-actions>
-  <button mat-button (click)="updateMetadata()">No Thanks</button>
-  <button mat-button>Ok</button>
+<div mat-dialog-actions style="width: 100%" class="d-flex justify-content-between">
+  <button mat-mini-fab color="regular" mat-dialog-close><mat-icon>cancel</mat-icon></button>
+  <button mat-mini-fab color="regular" (click)="saveMetadataToLocalStorage()"><mat-icon>save</mat-icon></button>
+  <button mat-mini-fab color="regular" mat-dialog-close (click)="updateMetadata()"><mat-icon>check_circle_outline</mat-icon></button>
 </div>
