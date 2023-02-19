@@ -6,3 +6,4 @@ export interface BackendStatusInterface {
   MEASUREMENT_VALUE: number
   LIMIT_VALUE: number
 }
+

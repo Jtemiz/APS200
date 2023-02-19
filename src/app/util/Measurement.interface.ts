@@ -16,7 +16,7 @@ export interface MeasurementMetadata {
   id: string
   name: string
   date: Date
-  place: string
+  location: string
   distance: number
   user: string
   description: string

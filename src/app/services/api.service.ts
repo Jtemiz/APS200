@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {io} from "socket.io-client";
 import {BackendStatusInterface} from "../util/BackendStatus.interface";
 import {MeasurementInterface, MeasurementMetadata} from "../util/Measurement.interface";
+import {timestamp} from "rxjs";
+import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +22,11 @@ export class ApiService {
 
   constructor() {
     this.socket = io("127.0.0.1:5000", {transports: ['websocket']})
-    console.log(this.socket)
     this.socket.on('connect', () => console.log("connected")
     )
     this.socket.on('status', (data) => {
-      this.backendStatus = data['sps-status']
+      this.backendStatus = data
+      console.log(data)
     })
   }
 
@@ -36,7 +38,7 @@ export class ApiService {
    * Chart Actions
    */
   public start_measuring() {
-    this.socket.emit('chart:start:measuring', (response: string) => {
+    this.socket.emit('chart:start:measuring', {timestamp: Math.round(Date.now()/1000)}, (response: string) => {
       console.log(response)
     })
   }
@@ -89,6 +91,12 @@ export class ApiService {
       socket.emit('data:get:allTables', (response: MeasurementMetadata[]) => {
         return resolve(response)
       })
+    })
+  }
+
+  public delete_table(tableName: string) {
+    this.socket.emit('data:delete:table', tableName, (response: string) => {
+      console.log(response)
     })
   }
 
