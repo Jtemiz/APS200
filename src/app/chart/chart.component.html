@@ -3,16 +3,16 @@
 </div>
 <div class="button-container">
   <button class="btn btn-primary button-custom" (click)="apiService.start_measuring()"
-          *ngIf="!apiService.getValue('MEASUREMENT_ACTIVE')">Messung starten
+          *ngIf="!apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung starten
   </button>
   <button class="btn btn-primary button-custom" (click)="apiService.stop_measuring()"
-          *ngIf="apiService.getValue('MEASUREMENT_ACTIVE')">Messung beenden
+          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung beenden
   </button>
   <button class="btn btn-primary button-custom"
-          *ngIf="apiService.getValue('MEASUREMENT_ACTIVE') &&
-          !apiService.getValue('PAUSE_ACTIVE')">Pause starten
+          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE') &&
+          !apiService.getStatusValue('PAUSE_ACTIVE')">Pause starten
   </button>
-  <button class="btn btn-primary button-custom" *ngIf="apiService.getValue('PAUSE_ACTIVE')">Pause stoppen</button>
+  <button class="btn btn-primary button-custom" *ngIf="apiService.getStatusValue('PAUSE_ACTIVE')">Pause stoppen</button>
   <button class="btn btn-primary button-custom" (click)="open_metadata_input_dialog()">Metadaten eingeben</button>
 </div>
 

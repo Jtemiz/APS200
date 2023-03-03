@@ -4,7 +4,6 @@ export interface MeasurementInterface {
 }
 
 export interface MeasurementValue {
-  index: number
   position: number
   height: number
   speed: number

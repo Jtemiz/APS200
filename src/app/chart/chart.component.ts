@@ -13,20 +13,7 @@ Chart.register(annotationPlugin);
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements OnInit {
-  constructor(public apiService: ApiService, public dialog: MatDialog) {
-  }
-
-  private changeLimitValue() {
-    let input = prompt("Grenzwerte ändern", this.chartAnnotationOptions.value + 'mm');
-    if (input != undefined) {
-      if ((parseInt(input) < this.chartOptions.options.scales.y.max)) {
-        this.chartAnnotationOptions.value = parseInt(input);
-        this.chart.update()
-      }
-    }
-
-  }
-
+  private interval: any
   public chart: any
   private chartAnnotationOptions = {
     type: 'line',
@@ -101,14 +88,43 @@ export class ChartComponent implements OnInit {
       animation: false
     },
   };
+  constructor(public apiService: ApiService, public dialog: MatDialog) {}
+
+  private changeLimitValue() {
+
+    let input = prompt("Grenzwerte ändern", this.chartAnnotationOptions.value + 'mm');
+    if (input != undefined) {
+      if ((parseInt(input) < this.chartOptions.options.scales.y.max)) {
+        this.chartAnnotationOptions.value = parseInt(input);
+        this.chart.update()
+      }
+    }
+  }
+
+
 
   ngOnInit(): void {
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
+    this.interval = setInterval(() => this.updateChart(this.apiService), 500)
   }
 
   public open_metadata_input_dialog() {
     const dialogRef = this.dialog.open(MetadataInputComponent)
+  }
+
+  private updateChart(apiService: ApiService) {
+    if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
+      console.log('xy')
+      let data = apiService.getMeasurementValues()
+      console.log(data)
+      for (let i = 0; i < data.length; i++) {
+        this.chart.data.labels.push(data[i].position)
+        this.chart.data.datasets[0].data.push(data[i].height)
+      }
+      apiService.measurementValues = []
+      this.chart.update()
+    }
   }
 }

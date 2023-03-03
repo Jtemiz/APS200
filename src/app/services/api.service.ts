@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {io} from "socket.io-client";
 import {BackendStatusInterface} from "../util/BackendStatus.interface";
-import {MeasurementInterface, MeasurementMetadata} from "../util/Measurement.interface";
-import {timestamp} from "rxjs";
+import {MeasurementInterface, MeasurementMetadata, MeasurementValue} from "../util/Measurement.interface";
+import {publish, timestamp} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  backendStatus: BackendStatusInterface = {
+  statusValue: BackendStatusInterface = {
     MEASUREMENT_ACTIVE: false,
     PAUSE_ACTIVE: false,
     BATTERY_LEVEL: 0,
@@ -18,6 +18,8 @@ export class ApiService {
     LIMIT_VALUE: 0
   }
 
+  measurementValues: MeasurementValue[] = []
+
   public socket;
 
   constructor() {
@@ -25,13 +27,23 @@ export class ApiService {
     this.socket.on('connect', () => console.log("connected")
     )
     this.socket.on('status', (data) => {
-      this.backendStatus = data
-      console.log(data)
+      this.statusValue = data
+    })
+    this.socket.on('value', (data) => {
+      for (let i = 0; i < data.length; i++) {
+        this.measurementValues.push(data[i])
+      }
+      console.log(this.measurementValues)
     })
   }
 
-  getValue(key: string): any {
-    return this.backendStatus[key as keyof BackendStatusInterface]
+  getStatusValue(key: string): any {
+    return this.statusValue[key as keyof BackendStatusInterface]
+  }
+
+  getMeasurementValues(): MeasurementValue[] {
+    console.log(this.measurementValues)
+    return this.measurementValues
   }
 
   /**
