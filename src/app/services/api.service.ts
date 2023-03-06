@@ -49,7 +49,7 @@ export class ApiService {
    * Chart Actions
    */
   public start_measuring() {
-    this.socket.emit('chart:start:measuring', {timestamp: Math.round(Date.now()/1000)}, (response: string) => {
+    this.socket.emit('chart:start:measuring', {timestamp: Math.round(Date.now() / 1000)}, (response: string) => {
       console.log(response)
     })
   }
@@ -66,31 +66,45 @@ export class ApiService {
     })
   }
 
-  public add_comment() {
-    this.socket.emit('chart:add:comment', (response: string) => {
+  public add_comment(comment: string) {
+    this.socket.emit('chart:add:comment', ({comment: comment}), (response: string) => {
       console.log(response)
     })
   }
 
   public set_metadata(name: string, user: string, location: string, notes: string) {
-    this.socket.emit('chart:set:metadata', ({metaData: {
-      name: name,
-      user: user,
-      location: location,
-      notes: notes,
-      time: Date.now().toPrecision()
-    }}), (response: string) => {
+    this.socket.emit('chart:set:metadata', ({
+      metaData: {
+        name: name,
+        user: user,
+        location: location,
+        notes: notes,
+        time: Date.now().toPrecision()
+      }
+    }), (response: string) => {
       console.log(response)
+    })
+  }
+
+  public async get_limit_value(): Promise<number> {
+    let socket = this.socket
+    return new Promise(function (resolve, reject) {
+      socket.emit('chart:get:limitvalue', (response: number) => {
+        return resolve(response)
+      })
     })
   }
 
   /**
    * Data Actions
    */
-  public async get_measurement(tableName: string): Promise<any> {
+  public async get_measurement(tableName: string, withComments: boolean): Promise<any> {
     let socket = this.socket
     return await new Promise(function (resolve, reject) {
-      socket.emit('data:get:measurement', (tableName), (response: MeasurementInterface) => {
+      socket.emit('data:get:measurement', ({
+        tableName: tableName,
+        withComments: withComments
+      }), (response: MeasurementInterface) => {
         return resolve(response)
       })
     })
@@ -126,10 +140,10 @@ export class ApiService {
 
   public add_quick_com_button(content: string) {
     let socket = this.socket
-      socket.emit('settings:add:commentBtn', (content), (response: string) => {
-        if (response === 'error') {
-          // todo generate toastr
-        }
+    socket.emit('settings:add:commentBtn', (content), (response: string) => {
+      if (response === 'error') {
+        // todo generate toastr
+      }
     })
   }
 

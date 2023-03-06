@@ -15,10 +15,12 @@ Chart.register(annotationPlugin);
 export class ChartComponent implements OnInit {
   private interval: any
   public chart: any
+  public quickComBtns: string[] = []
+  public quickComToAdd: string = ''
   private chartAnnotationOptions = {
     type: 'line',
     scaleID: 'y',
-    value: 5,
+    value: 4,
     borderColor: 'red',
     borderWidth: 3,
     label: {
@@ -108,13 +110,14 @@ export class ChartComponent implements OnInit {
     }
   }
 
-
-
   ngOnInit(): void {
+    console.log(this.apiService.getStatusValue('LIMIT_VALUE'))
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
     this.interval = setInterval(() => this.updateChart(this.apiService), 500)
+    this.get_all_quick_com_buttons()
+    this.get_limit_value()
   }
 
   public open_metadata_input_dialog() {
@@ -123,9 +126,7 @@ export class ChartComponent implements OnInit {
 
   private updateChart(apiService: ApiService) {
     if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
-      console.log('xy')
       let data = apiService.getMeasurementValues()
-      console.log(data)
       for (let i = 0; i < data.length; i++) {
         this.chart.data.labels.push(data[i].position)
         this.chart.data.datasets[0].data.push(data[i].height)
@@ -135,11 +136,25 @@ export class ChartComponent implements OnInit {
     }
   }
 
-  public get_all_quick_com_buttons(): string[] {
-    let result: string[] = []
+  public get_all_quick_com_buttons() {
     this.apiService.get_all_quick_com_buttons().then((res) => {
-      result = res
+      this.quickComBtns = res
     })
-    return result
   }
+
+  public addComment(comment?: string) {
+    if (comment == undefined) {
+      this.apiService.add_comment(this.quickComToAdd)
+    } else {
+      this.apiService.add_comment(comment)
+    }
+  }
+
+  get_limit_value() {
+    this.apiService.get_limit_value().then((response) => {
+      this.chartAnnotationOptions.value = response
+      this.chart.update()
+    })
+  }
+
 }

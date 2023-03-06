@@ -15,18 +15,31 @@ export class ChartModalComponent implements OnInit{
     data: {
       labels: [],
       datasets: [{
-        label: "Messung",
+        label: "Messung in mm",
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
         data: [],
         fill: false,
       }, {
-        label: "Grenzwert",
+        label: "Grenzwert in mm",
         backgroundColor: 'rgba(255,99,132,0.45)',
         borderColor: 'rgba(255, 99, 132, 0.45)',
         data: [],
         fill: false
-      }],
+      }, {
+        label: "Fahrbahnbreite in m",
+        backgroundColor: 'rgba(99,112,255,0.45)',
+        borderColor: 'rgba(99,112,255,0.45)',
+        data: [],
+        fill: false
+      }, {
+        label: "Geschwindigkeit in km/h",
+        backgroundColor: 'rgba(99,232,255,0.45)',
+        borderColor: 'rgba(99,232,255,0.45)',
+        data: [],
+        fill: false
+      }
+      ],
     },
     options: {
       title: {
@@ -69,11 +82,13 @@ export class ChartModalComponent implements OnInit{
   ngOnInit(): void {
     Chart.register(...registerables)
     this.chart = new Chart('chart', this.chartOptions)
-    this.apiService.get_measurement(this.data.tableName).then((values) => {
+    this.apiService.get_measurement(this.data.tableName, false).then((values) => {
       for (let i = 0; i<values.length; i++) {
-        this.chart.data.labels.push(values[i][1])
-        this.chart.data.datasets[0].data.push(values[i][2])
+        this.chart.data.labels.push(values[i][0])
+        this.chart.data.datasets[0].data.push(values[i][1])
         this.chart.data.datasets[1].data.push(values[i][4])
+        this.chart.data.datasets[2].data.push(values[i][3])
+        this.chart.data.datasets[3].data.push(values[i][2])
       }
       this.chart.update()
       console.log(values)

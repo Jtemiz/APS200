@@ -7,6 +7,8 @@ import {ChartModalComponent} from "./chart-modal.component";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
 import { saveAs } from 'file-saver';
+import _default from "chart.js/dist/plugins/plugin.tooltip";
+import type = _default.defaults.animations.numbers.type;
 
 @Component({
   selector: 'app-data',
@@ -17,7 +19,7 @@ export class DataComponent implements OnInit {
   constructor(public apiService: ApiService, public dialog: MatDialog) {
   }
 
-  displayedTableCols: string[] = ['name', 'location', 'distance', 'user', 'measure', 'date', 'show', 'download', 'edit', 'delete']
+  displayedTableCols: string[] = ['name', 'location', 'distance', 'user', 'measure', 'date', 'actions']
   tables: MeasurementMetadata[] = []
 
   dataSource: MatTableDataSource<MeasurementMetadata> = new MatTableDataSource<MeasurementMetadata>()
@@ -25,11 +27,19 @@ export class DataComponent implements OnInit {
   ngOnInit() {
     this.apiService.get_all_tables().then(data => {
       this.dataSource.data = data
+      console.log(this.dataSource.data)
     })
   }
 
-  public toDateTime(timestamp: string) {
-    return new Date(Number.parseInt(timestamp) * 1000).toLocaleString()
+  public toDateTime(timestamp: string, forSorting: boolean) {
+    const date_object = new Date(Number.parseInt(timestamp) * 1000)
+    if (forSorting) {
+      const date = date_object.getFullYear().toString() + '-' + (date_object.getMonth()+1).toString() + '-' + date_object.getDate().toString()
+      const time = date_object.getHours().toString() + ':' + date_object.getMinutes().toString() + ':' + date_object.getSeconds().toString()
+      return date + '_' + time
+    } else {
+      return date_object.toLocaleString()
+    }
   }
 
   public open_chart_modal(tablename: string) {
@@ -49,17 +59,32 @@ export class DataComponent implements OnInit {
   }
 
 
-  public download_csv(tableName: string) {
+  public async download_csv(tableName: string) {
     let csv_content: any = {}
-    this.apiService.get_measurement(tableName).then((values) => {
+    let csv = ''
+    await this.apiService.get_measurement(tableName, true).then((values) => {
       csv_content.measurementValues = values
     })
-    // @ts-ignore
     csv_content.metaData = this.dataSource.data.find((elem) => {
       return elem.date == tableName
     })
-
-    console.log(csv_content)
+    csv = csv.concat('Datum:;'+ this.toDateTime(csv_content.metaData.date, false) + '\r\n')
+    csv = csv.concat('Prüfer:;'+ csv_content.metaData.user + '\r\n')
+    csv = csv.concat('Adresse:;'+ csv_content.metaData.location + '\r\n')
+    csv = csv.concat('Maßnahme:;'+ csv_content.metaData.name + '\r\n')
+    csv = csv.concat('Notizen:;'+ csv_content.metaData.notes + '\r\n')
+    csv = csv.concat('Länge:;'+ csv_content.metaData.distance.toString() + '\r\n\r\n')
+    csv = csv.concat('Station;Höhe;Geschw;Breite;Grenze;Kommentar\r\n')
+    for (let i = 0; i < csv_content.measurementValues.length; i++) {
+      const row_array = csv_content.measurementValues[i]
+      let row = ''
+      for (let j = 0; j < row_array.length; j++) {
+        row = row.concat(row_array[j] == null ? ';' : row_array[j].toString() + ';')
+      }
+      csv = csv.concat(row + '\r\n')
+    }
+    let blob = new Blob([csv], {type: 'text/csv'})
+    saveAs(blob, this.toDateTime(csv_content.metaData.date, true) + '.csv')
   }
 
   sortData(sort: Sort) {
