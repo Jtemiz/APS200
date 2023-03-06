@@ -1,6 +1,6 @@
 <html>
 <body>
-<header class="fixed-top">
+<header class="sticky-top" style="z-index: 0; height: 60px">
   <mat-toolbar>
     <img src="assets/logo.png" height="40px">
     <span class="navbar-spacer"></span>
@@ -13,6 +13,12 @@
     <button mat-icon-button class="navbar-item" routerLink="/settings" routerLinkActive="mat-primary">
       <mat-icon>settings</mat-icon>
     </button>
+    <div>
+      <div matTooltip="{{(apiService.getStatusValue('BATTERY_LEVEL') * 100).toString() + '%'}}" matTooltipPosition="above" class="batteryContainer">
+        <div class="batteryOuter"><div id="batteryLevel" style="width:{{(apiService.getStatusValue('BATTERY_LEVEL') * 100).toString() + '%'}}"></div></div>
+        <div class="batteryBump"></div>
+      </div>
+    </div>
   </mat-toolbar>
 </header>
 <div class="content-container">
@@ -20,3 +26,4 @@
 </div>
 </body>
 </html>
+

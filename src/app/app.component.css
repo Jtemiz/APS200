@@ -13,8 +13,48 @@ header {
 
 .content-container {
   padding: 2%;
-  margin: 60px 2% 5% 2% ;
+  margin: 20px 2% 5% 2%;
   background-color: var(--content-container-color);
   border-radius: 10px;
   overflow: hidden;
+}
+
+
+
+/*
+Battery-Styles
+ */
+
+
+.batteryContainer {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.batteryOuter {
+  border-radius: 3px;
+  border: 1px solid #444;
+  padding: 1px;
+  width: 40px;
+  height: 20px;
+}
+
+.batteryBump {
+  border-radius: 2px;
+  background-color: #444;
+  margin: 1px;
+  width: 2px;
+  height: 6px;
+}
+
+#batteryLevel {
+  border-radius: 2px;
+  background-color: #73AD21;
+  height:16px;
 }

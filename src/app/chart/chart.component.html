@@ -3,16 +3,15 @@
 </div>
 <div class="button-container">
   <button class="btn btn-primary button-custom" (click)="apiService.start_measuring()"
-          *ngIf="!apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung starten
-  </button>
+          *ngIf="!apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung starten</button>
   <button class="btn btn-primary button-custom" (click)="apiService.stop_measuring()"
-          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung beenden
-  </button>
+          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung beenden</button>
   <button class="btn btn-primary button-custom"
           *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE') &&
-          !apiService.getStatusValue('PAUSE_ACTIVE')">Pause starten
-  </button>
+          !apiService.getStatusValue('PAUSE_ACTIVE')">Pause starten</button>
   <button class="btn btn-primary button-custom" *ngIf="apiService.getStatusValue('PAUSE_ACTIVE')">Pause stoppen</button>
-  <button class="btn btn-primary button-custom" (click)="open_metadata_input_dialog()">Metadaten eingeben</button>
+  <button class="btn btn-primary button-custom" (click)="open_metadata_input_dialog()">Daten eingeben</button>
+  <ng-container *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+    <button class="btn btn-primary button-custom" *ngFor="let btn of this.get_all_quick_com_buttons()">{{btn}}</button>
+  </ng-container><button class="btn btn-primary button-custom"></button>
 </div>
-

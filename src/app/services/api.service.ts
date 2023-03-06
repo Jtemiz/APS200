@@ -33,7 +33,6 @@ export class ApiService {
       for (let i = 0; i < data.length; i++) {
         this.measurementValues.push(data[i])
       }
-      console.log(this.measurementValues)
     })
   }
 
@@ -88,9 +87,9 @@ export class ApiService {
   /**
    * Data Actions
    */
-  public async get_measurement(tableName: string): Promise<MeasurementInterface> {
+  public async get_measurement(tableName: string): Promise<any> {
     let socket = this.socket
-    return new Promise(function (resolve, reject) {
+    return await new Promise(function (resolve, reject) {
       socket.emit('data:get:measurement', (tableName), (response: MeasurementInterface) => {
         return resolve(response)
       })

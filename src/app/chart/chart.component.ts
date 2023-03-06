@@ -85,10 +85,17 @@ export class ChartComponent implements OnInit {
         }]
         */
       },
-      animation: false
+      elements: {
+        point: {
+          pointStyle: false
+        }
+      },
+      animation: false,
     },
+
   };
   constructor(public apiService: ApiService, public dialog: MatDialog) {}
+
 
   private changeLimitValue() {
 
@@ -126,5 +133,13 @@ export class ChartComponent implements OnInit {
       apiService.measurementValues = []
       this.chart.update()
     }
+  }
+
+  public get_all_quick_com_buttons(): string[] {
+    let result: string[] = []
+    this.apiService.get_all_quick_com_buttons().then((res) => {
+      result = res
+    })
+    return result
   }
 }
