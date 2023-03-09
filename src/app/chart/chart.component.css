@@ -7,14 +7,7 @@
 
 .button-container {
   float: right;
-  width: 15vw
-}
-
-.button-custom {
-  margin-bottom: 10px;
-  font-size: 15px;
-  border: var(--startStop-button-color-regular) solid 3px;
-  background: var(--startStop-button-color-regular);
-  height: 44px;
-  width: 100%;
+  width: 15vw;
+  height: 70vh;
+  overflow-y: scroll;
 }

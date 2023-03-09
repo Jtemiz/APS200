@@ -127,6 +127,10 @@ export class ChartComponent implements OnInit {
   private updateChart(apiService: ApiService) {
     if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
       let data = apiService.getMeasurementValues()
+      while (this.chart.data.labels.length > 100) {
+        this.chart.data.labels.shift()
+        this.chart.data.datasets[0].data.shift()
+      }
       for (let i = 0; i < data.length; i++) {
         this.chart.data.labels.push(data[i].position)
         this.chart.data.datasets[0].data.push(data[i].height)

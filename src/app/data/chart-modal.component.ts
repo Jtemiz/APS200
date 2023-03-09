@@ -91,7 +91,6 @@ export class ChartModalComponent implements OnInit{
         this.chart.data.datasets[3].data.push(values[i][2])
       }
       this.chart.update()
-      console.log(values)
     })
   }
 

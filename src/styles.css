@@ -12,3 +12,19 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.button-custom {
+  margin-bottom: 10px;
+  font-size: 15px;
+  border: var(--startStop-button-color-regular) solid 3px;
+  background: var(--startStop-button-color-regular);
+  height: max(44px, fit-content);
+  width: 100%;
+}
+
+.table-container {
+  height: 80vh;
+  overflow: auto;
+}
+

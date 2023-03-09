@@ -21,6 +21,7 @@ import { MetadataInputComponent } from './chart/metadata-input.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { ChartModalComponent } from './data/chart-modal.component';
+import { CaliModalComponent } from './settings/cali-modal/cali-modal.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ChartModalComponent } from './data/chart-modal.component';
     SettingsComponent,
     DataComponent,
     MetadataInputComponent,
-    ChartModalComponent
+    ChartModalComponent,
+    CaliModalComponent
   ],
     imports: [
         BrowserModule,

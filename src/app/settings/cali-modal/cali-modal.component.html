@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>Kalibrierung</h1>
+<div mat-dialog-content class="cali-container">
+  <mat-list class="cali-button-container">
+    <mat-list-item *ngFor="let step of caliSteps">
+      <button mat-button class="btn button-custom" (click)="setCalibrationValue(step)">{{step}} mm</button>
+    </mat-list-item>
+    <mat-list-item *ngIf="!apiService.getStatusValue('CALI_DIST_MES_ACTIVE')">
+      <button mat-button class="btn button-custom"
+              (click)="this.apiService.startCalibrationDistanceMeasuring(this.data.password)">Längenmessung starten
+      </button>
+    </mat-list-item>
+    <mat-list-item *ngIf="apiService.getStatusValue('CALI_DIST_MES_ACTIVE')">
+      <button mat-button class="btn button-custom"
+              (click)="this.apiService.stopCalibrationDistanceMeasuring(this.data.password)">Längenmessung beenden
+      </button>
+    </mat-list-item>
+  </mat-list>
+  <div class="value-container">
+    <div class="value-field justify-content-center">
+      <p>{{apiService.getStatusValue('MEASUREMENT_VALUE')}}</p>
+      <mat-icon style="width: 80%">swap_vertical</mat-icon>
+    </div>
+    <div class="value-field justify-content-center">
+      <p>{{apiService.getStatusValue('MEASUREMENT_DISTANCE')}}</p>
+      <mat-icon style="width: 80%">swap_horizontal</mat-icon>
+    </div>
+  </div>
+</div>
+
+
+<div mat-dialog-actions style="width: 40px" class="d-flex justify-content-between">
+  <button mat-mini-fab color="regular" mat-dialog-close>
+    <mat-icon>check_circle_outline</mat-icon>
+  </button>
+</div>
+

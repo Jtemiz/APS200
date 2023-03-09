@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {MatTable} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {CaliModalComponent} from "./cali-modal/cali-modal.component";
 
 @Component({
   selector: 'app-settings',
@@ -14,7 +16,7 @@ export class SettingsComponent implements OnInit {
 
   @ViewChild(MatTable) table: MatTable<string> | undefined;
 
-  constructor(public apiService: ApiService) {
+  constructor(public apiService: ApiService, public dialog: MatDialog) {
 
   }
 
@@ -44,6 +46,23 @@ export class SettingsComponent implements OnInit {
     if (index > -1) {
       this.commentBtns.splice(index, 1);
       this.table?.renderRows()
+    }
+  }
+
+  public async openCalModal() {
+
+    let pwInput = prompt("Passwort eingeben",)
+    if (pwInput != undefined) {
+      await this.apiService.getCalibrationSteps(pwInput).then((response) => {
+        this.dialog.open(CaliModalComponent, {
+          data: {
+            calibrationSteps: response,
+            password: pwInput
+          }
+        })
+      }).catch((error) => {
+        // todo: error handling
+      })
     }
   }
 }

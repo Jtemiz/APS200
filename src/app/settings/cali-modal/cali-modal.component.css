@@ -1,0 +1,23 @@
+.value-field {
+  height: 88px;
+  width: 88px;
+  background: rgba(0, 0, 0, 0.09);
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.value-container {
+  float: right;
+  width: 50%;
+}
+.cali-button-container {
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.09);
+  float: left;
+  width: 50%;
+}
+
+.cali-container {
+  width: 40vw;
+  display: flex;
+}

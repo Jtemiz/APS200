@@ -3,21 +3,28 @@
 </div>
 <div class="button-container">
   <button class="btn btn-primary button-custom" (click)="apiService.start_measuring()"
-          *ngIf="!apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung starten</button>
+          *ngIf="!apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung starten
+  </button>
   <button class="btn btn-primary button-custom" (click)="apiService.stop_measuring()"
-          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung beenden</button>
+          *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">Messung beenden
+  </button>
   <button class="btn btn-primary button-custom"
           *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE') &&
-          !apiService.getStatusValue('PAUSE_ACTIVE')" (click)="apiService.toggle_pause()">Pause starten</button>
-  <button class="btn btn-primary button-custom" *ngIf="apiService.getStatusValue('PAUSE_ACTIVE')">Pause stoppen</button>
+          !apiService.getStatusValue('PAUSE_ACTIVE')" (click)="apiService.start_pause()">Pause starten
+  </button>
+  <button class="btn btn-primary button-custom" *ngIf="apiService.getStatusValue('PAUSE_ACTIVE')"
+          (click)="apiService.stop_pause()">Pause stoppen</button>
   <button class="btn btn-primary button-custom" (click)="open_metadata_input_dialog()">Daten eingeben</button>
   <div *ngIf="apiService.getStatusValue('MEASUREMENT_ACTIVE')">
     <mat-divider style="margin: 10px"></mat-divider>
-    <button class="btn btn-primary button-custom" *ngFor="let btn of this.quickComBtns" (click)="addComment(btn)">{{btn}}</button>
+    <button class="btn btn-primary button-custom" *ngFor="let btn of this.quickComBtns"
+            (click)="addComment(btn)">{{btn}}</button>
     <mat-form-field style="width: 100%; ">
       <mat-label>Freitext-Kommentar</mat-label>
       <input matInput placeholder="Inhalt" (keydown.enter)="addComment()" [(ngModel)]="quickComToAdd">
-      <button matSuffix mat-icon-button (click)="addComment()"><mat-icon>send</mat-icon></button>
+      <button matSuffix mat-icon-button (click)="addComment()">
+        <mat-icon>send</mat-icon>
+      </button>
     </mat-form-field>
   </div>
 </div>

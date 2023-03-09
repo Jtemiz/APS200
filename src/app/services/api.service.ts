@@ -4,6 +4,7 @@ import {BackendStatusInterface} from "../util/BackendStatus.interface";
 import {MeasurementInterface, MeasurementMetadata, MeasurementValue} from "../util/Measurement.interface";
 import {publish, timestamp} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
+import {PrimitiveTypes} from "@angular/cli/src/analytics/analytics-parameters";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,11 @@ export class ApiService {
     MEASUREMENT_ACTIVE: false,
     PAUSE_ACTIVE: false,
     BATTERY_LEVEL: 0,
-    MEASUREMENT_DISTANCE: 0,
     MEASUREMENT_VALUE: 0,
-    LIMIT_VALUE: 0
+    LIMIT_VALUE: 0,
+    CALI_ACTIVE: false,
+    CALI_DIST_MES_ACTIVE: false,
+    MEASUREMENT_DISTANCE: 0,
   }
 
   measurementValues: MeasurementValue[] = []
@@ -27,6 +30,7 @@ export class ApiService {
     this.socket.on('connect', () => console.log("connected")
     )
     this.socket.on('status', (data) => {
+      console.log(data)
       this.statusValue = data
     })
     this.socket.on('value', (data) => {
@@ -60,8 +64,14 @@ export class ApiService {
     })
   }
 
-  public toggle_pause() {
-    this.socket.emit('chart:toggle:pause', (response: string) => {
+  public start_pause() {
+    this.socket.emit('chart:start:pause', (response: string) => {
+      console.log(response)
+    })
+  }
+
+  public stop_pause() {
+    this.socket.emit('chart:stop:pause', (response: string) => {
       console.log(response)
     })
   }
@@ -152,6 +162,46 @@ export class ApiService {
       if (response === 'error') {
         // todo generate toastr
       }
+    })
+  }
+
+  /**
+   * Calibration Actions
+   */
+
+  public getCalibrationSteps(password: string): Promise<number[]> {
+    let socket = this.socket
+    return new Promise(function (resolve, reject) {
+      socket.emit('settings:start:calibration', (password), (response: string) => {
+        if (response.includes('wrong password')) {
+          reject('Wrong Password')
+        } else {
+          return resolve(JSON.parse(response))
+        }
+      })
+    })
+  }
+
+  public stopCalibration() {
+    this.socket.emit('settings:stop:calibration')
+  }
+
+
+  public setCalibrationStep(step: number, password:string) {
+    this.socket.emit('settings:set:calibrationStep', ({step: step, password: password}), (response: string) => {
+      return response
+    })
+  }
+
+  public startCalibrationDistanceMeasuring(password: string) {
+    this.socket.emit('settings:start:calibration:measurement', (password), (response: string) => {
+      return response
+    })
+  }
+
+  public stopCalibrationDistanceMeasuring(password: string) {
+    this.socket.emit('settings:stop:calibration:measurement', (password), (response: string) => {
+      return response
     })
   }
 }
