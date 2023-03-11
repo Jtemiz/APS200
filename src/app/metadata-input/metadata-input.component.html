@@ -26,10 +26,16 @@
       <input matInput [(ngModel)]="metaData.inputNotes" name="inputNotes" type="text">
     </mat-form-field>
     </p>
+    <p>
+      <mat-form-field *ngIf="measurement == undefined">
+        <mat-label>Strassenbreite</mat-label>
+        <input matInput [(ngModel)]="metaData.inputStreetWidth" name="inputStreetWidth" type="number">
+      </mat-form-field>
+    </p>
   </form>
 </div>
 <div mat-dialog-actions style="width: 100%" class="d-flex justify-content-between">
   <button mat-icon-button color="regular" mat-dialog-close><mat-icon>cancel</mat-icon></button>
   <button mat-icon-button color="regular" (click)="saveMetadataToLocalStorage()"><mat-icon>save</mat-icon></button>
-  <button mat-icon-button color="regular" mat-dialog-close (click)="updateMetadata()"><mat-icon>check_circle_outline</mat-icon></button>
+  <button mat-icon-button color="regular" [mat-dialog-close]="this.metaData" (click)="updateMetadata()"><mat-icon>check_circle_outline</mat-icon></button>
 </div>

@@ -1,5 +1,21 @@
 <div class="chart-container">
   <canvas id="chart"> {{chart}}</canvas>
+
+  <mat-chip-listbox>
+    <mat-chip>
+      <img matChipAvatar src="assets/height-symbol.svg" width="25">
+      {{this.apiService.getStatusValue('MEASUREMENT_VALUE')}}
+    </mat-chip>
+    <mat-chip color="primary" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+      <img matChipAvatar src="assets/distance-symbol.svg" width="25">
+      {{this.apiService.getStatusValue('MEASUREMENT_DISTANCE')}}
+    </mat-chip>
+    <mat-chip color="accent" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+      <mat-icon matChipAvatar>speed</mat-icon>
+      {{this.apiService.getMeasurementValues()[this.apiService.getMeasurementValues().length-1].speed}}
+    </mat-chip>
+  </mat-chip-listbox>
+
 </div>
 <div class="button-container">
   <button class="btn btn-primary button-custom" (click)="apiService.start_measuring()"
@@ -20,7 +36,7 @@
     <button class="btn btn-primary button-custom" *ngFor="let btn of this.quickComBtns"
             (click)="addComment(btn)">{{btn}}</button>
     <mat-form-field style="width: 100%; ">
-      <mat-label>Freitext-Kommentar</mat-label>
+      <mat-label>Freitext</mat-label>
       <input matInput placeholder="Inhalt" (keydown.enter)="addComment()" [(ngModel)]="quickComToAdd">
       <button matSuffix mat-icon-button (click)="addComment()">
         <mat-icon>send</mat-icon>

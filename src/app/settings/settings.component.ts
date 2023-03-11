@@ -50,7 +50,6 @@ export class SettingsComponent implements OnInit {
   }
 
   public async openCalModal() {
-
     let pwInput = prompt("Passwort eingeben",)
     if (pwInput != undefined) {
       await this.apiService.getCalibrationSteps(pwInput).then((response) => {

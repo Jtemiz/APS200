@@ -9,12 +9,14 @@ import {ApiService} from "../services/api.service";
   templateUrl: './metadata-input.component.html',
   styleUrls: ['./metadata-input.component.css']
 })
-export class MetadataInputComponent implements OnInit{
+export class MetadataInputComponent {
+  public measurement
   public metaData: any = {
     inputName: '',
     inputUser: '',
     inputLocation: '',
-    inputNotes: ''
+    inputNotes: '',
+    inputStreetWidth: 0
   }
 
 
@@ -24,22 +26,24 @@ export class MetadataInputComponent implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: any,
     public apiService: ApiService
   ) {
+    if (data.metaData != undefined) {
+      this.metaData = data.metaData
+    }
+    this.measurement = data.measurement
   }
 
   updateMetadata() {
-    console.log('updateMetadata')
-    this.apiService.set_metadata(this.metaData.inputName, this.metaData.inputUser, this.metaData.inputLocation, this.metaData.inputNotes)
+    if (this.measurement == undefined) {
+      this.apiService.set_metadata(this.metaData.inputName, this.metaData.inputUser, this.metaData.inputLocation, this.metaData.inputNotes, this.metaData.inputStreetWidth)
+    } else {
+      this.apiService.update_metadata(this.measurement, this.metaData.inputName, this.metaData.inputUser, this.metaData.inputLocation, this.metaData.inputNotes)
+    }
   }
 
   saveMetadataToLocalStorage() {
     localStorage.setItem('metaData', JSON.stringify(this.metaData))
-    console.log(JSON.stringify(this.metaData))
   }
 
-  ngOnInit(): void {
-    // @ts-ignore
-    this.metaData = localStorage.getItem('metaData') != null ? JSON.parse(localStorage.getItem('metaData')) : this.metaData
-  }
  /*
   public getLocation(): Promise<{ longitude: string, latitude: string }> {
     navigator.geolocation.getCurrentPosition((position) =>  {

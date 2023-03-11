@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {MeasurementInterface, MeasurementMetadata} from "../util/Measurement.interface";
 import {MatDialog} from "@angular/material/dialog";
-import {MetadataInputComponent} from "../chart/metadata-input.component";
+import {MetadataInputComponent} from "../metadata-input/metadata-input.component";
 import {ChartModalComponent} from "./chart-modal.component";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
@@ -27,7 +27,6 @@ export class DataComponent implements OnInit {
   ngOnInit() {
     this.apiService.get_all_tables().then(data => {
       this.dataSource.data = data
-      console.log(this.dataSource.data)
     })
   }
 
@@ -50,6 +49,27 @@ export class DataComponent implements OnInit {
     })
   }
 
+  public open_metadata_input(row: MeasurementMetadata) {
+    let metaData = {
+      inputName: row.name,
+      inputUser: row.user,
+      inputLocation: row.location,
+      inputNotes: row.notes,
+      inputStreetWidth: -1
+    }
+    const dialogRef = this.dialog.open(MetadataInputComponent, {data: {metaData: metaData, measurement: row.date}})
+    dialogRef.afterClosed().subscribe((resultMetaData) => {
+      let tmp = this.dataSource.data.find((elem) => {
+        return elem.date == row.date
+      })
+      if (tmp != undefined) {
+        tmp.name = resultMetaData.inputName
+        tmp.user = resultMetaData.inputUser
+        tmp.location = resultMetaData.inputLocation
+        tmp.notes = resultMetaData.inputNotes
+      }
+    })
+  }
 
   public delete_table(tableName: string) {
     this.apiService.delete_table(tableName)
@@ -81,7 +101,7 @@ export class DataComponent implements OnInit {
       for (let j = 0; j < row_array.length; j++) {
         row = row.concat(row_array[j] == null ? ';' : row_array[j].toString() + ';')
       }
-      csv = csv.concat(row + '\r\n')
+      csv = csv.concat(row.slice(0, -1) + '\r\n')
     }
     let blob = new Blob([csv], {type: 'text/csv'})
     saveAs(blob, this.toDateTime(csv_content.metaData.date, true) + '.csv')
@@ -104,7 +124,7 @@ export class DataComponent implements OnInit {
         case 'date':
           return compare(a.date, b.date, isAsc);
         case 'description':
-          return compare(a.description, b.description, isAsc);
+          return compare(a.notes, b.notes, isAsc);
         case 'user':
           return compare(a.user, b.user, isAsc);
         case 'distance':

@@ -3,7 +3,7 @@ import {Chart, registerables} from "chart.js";
 import annotationPlugin from 'chartjs-plugin-annotation';
 import {ApiService} from "../services/api.service";
 import {MatDialog} from "@angular/material/dialog";
-import {MetadataInputComponent} from "./metadata-input.component";
+import {MetadataInputComponent} from "../metadata-input/metadata-input.component";
 
 Chart.register(annotationPlugin);
 
@@ -35,6 +35,7 @@ export class ChartComponent implements OnInit {
 
   private chartOptions: any = {
     type: 'line',
+    responsive: true,
     data: {
       labels: [],
       datasets: [{
@@ -70,7 +71,7 @@ export class ChartComponent implements OnInit {
         y: {
           reverse: true,
           max: 30,
-          min: -5,
+          min: -10,
           ticks: {
             stepSize: 5
           }
@@ -100,10 +101,10 @@ export class ChartComponent implements OnInit {
 
 
   private changeLimitValue() {
-
     let input = prompt("Grenzwerte ändern", this.chartAnnotationOptions.value + 'mm');
     if (input != undefined) {
       if ((parseInt(input) < this.chartOptions.options.scales.y.max)) {
+        this.apiService.set_limit_value(parseInt(input))
         this.chartAnnotationOptions.value = parseInt(input);
         this.chart.update()
       }
@@ -111,7 +112,6 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.apiService.getStatusValue('LIMIT_VALUE'))
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
@@ -121,7 +121,9 @@ export class ChartComponent implements OnInit {
   }
 
   public open_metadata_input_dialog() {
-    const dialogRef = this.dialog.open(MetadataInputComponent)
+    // @ts-ignore
+    let metaData = localStorage.getItem('metaData') != null ? JSON.parse(localStorage.getItem('metaData')) : undefined
+    const dialogRef = this.dialog.open(MetadataInputComponent, {data: {measurement: undefined, metaData: metaData}})
   }
 
   private updateChart(apiService: ApiService) {
@@ -160,5 +162,4 @@ export class ChartComponent implements OnInit {
       this.chart.update()
     })
   }
-
 }

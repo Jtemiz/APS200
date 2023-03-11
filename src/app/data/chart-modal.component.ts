@@ -60,17 +60,18 @@ export class ChartModalComponent implements OnInit{
           max: 30,
           min: -5,
           ticks: {
-            stepSize: 5
+            stepSize: 2
           }
         },
       },
       animation: false,
       elements: {
         point: {
-          pointStyle: false
+          radius: 0
         }
       },
       normalized: true,
+      spanGaps: true,
     },
   };
 

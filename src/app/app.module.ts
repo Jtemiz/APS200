@@ -17,11 +17,12 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
-import { MetadataInputComponent } from './chart/metadata-input.component';
+import { MetadataInputComponent } from './metadata-input/metadata-input.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { ChartModalComponent } from './data/chart-modal.component';
 import { CaliModalComponent } from './settings/cali-modal/cali-modal.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { CaliModalComponent } from './settings/cali-modal/cali-modal.component';
         MatInputModule,
         FormsModule,
         MatDialogModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatChipsModule
     ],
   providers: [],
   bootstrap: [AppComponent]

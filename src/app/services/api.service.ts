@@ -30,7 +30,6 @@ export class ApiService {
     this.socket.on('connect', () => console.log("connected")
     )
     this.socket.on('status', (data) => {
-      console.log(data)
       this.statusValue = data
     })
     this.socket.on('value', (data) => {
@@ -45,7 +44,6 @@ export class ApiService {
   }
 
   getMeasurementValues(): MeasurementValue[] {
-    console.log(this.measurementValues)
     return this.measurementValues
   }
 
@@ -82,14 +80,15 @@ export class ApiService {
     })
   }
 
-  public set_metadata(name: string, user: string, location: string, notes: string) {
+  public set_metadata(name: string, user: string, location: string, notes: string, street_width: number) {
     this.socket.emit('chart:set:metadata', ({
       metaData: {
         name: name,
         user: user,
         location: location,
         notes: notes,
-        time: Date.now().toPrecision()
+        time: Date.now().toPrecision(),
+        streedwidth: street_width
       }
     }), (response: string) => {
       console.log(response)
@@ -105,6 +104,11 @@ export class ApiService {
     })
   }
 
+  public set_limit_value(limitValue: number) {
+    this.socket.emit('chart:set:limitvalue', (limitValue), (response: string) => {
+      console.log(response)
+    })
+  }
   /**
    * Data Actions
    */
@@ -131,6 +135,12 @@ export class ApiService {
 
   public delete_table(tableName: string) {
     this.socket.emit('data:delete:table', tableName, (response: string) => {
+      console.log(response)
+    })
+  }
+
+  public update_metadata(tableName: string, name: string, user: string, location: string, notes: string) {
+    this.socket.emit('data:set:metadata', ({tableName: tableName, metaData: {name: name, user: user, location: location, notes: notes}}), (response: string) => {
       console.log(response)
     })
   }
