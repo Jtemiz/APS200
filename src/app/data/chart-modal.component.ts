@@ -76,7 +76,7 @@ export class ChartModalComponent implements OnInit{
   };
 
   constructor(public dialogRef: MatDialogRef<ChartModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { tableName:string},
+              @Inject(MAT_DIALOG_DATA) public data: { tableName: string},
               public apiService: ApiService) {
   }
 

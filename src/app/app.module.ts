@@ -23,6 +23,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import { ChartModalComponent } from './data/chart-modal.component';
 import { CaliModalComponent } from './settings/cali-modal/cali-modal.component';
 import {MatChipsModule} from "@angular/material/chips";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {MatChipsModule} from "@angular/material/chips";
         FormsModule,
         MatDialogModule,
         MatTooltipModule,
-        MatChipsModule
+        MatChipsModule,
+        MatSnackBarModule
     ],
   providers: [],
   bootstrap: [AppComponent]

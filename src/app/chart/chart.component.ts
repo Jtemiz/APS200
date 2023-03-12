@@ -32,6 +32,11 @@ export class ChartComponent implements OnInit {
     },
     click: () => this.changeLimitValue()
   }
+  public lastVals = {
+    height: 0,
+    position: 0,
+    speed: 0
+  }
 
   private chartOptions: any = {
     type: 'line',
@@ -97,7 +102,9 @@ export class ChartComponent implements OnInit {
     },
 
   };
-  constructor(public apiService: ApiService, public dialog: MatDialog) {}
+
+  constructor(public apiService: ApiService, public dialog: MatDialog) {
+  }
 
 
   private changeLimitValue() {
@@ -137,9 +144,51 @@ export class ChartComponent implements OnInit {
         this.chart.data.labels.push(data[i].position)
         this.chart.data.datasets[0].data.push(data[i].height)
       }
-      apiService.measurementValues = []
+      if (data.length != 0 && this.apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
+        apiService.measurementValues = []
+      }
       this.chart.update()
     }
+  }
+
+  public get_digit_measurement_values(type: string): any {
+    const data = this.apiService.getMeasurementValues()[this.apiService.getMeasurementValues().length - 1]
+    if (data != undefined) {
+      switch (type) {
+        case 'height': {
+          this.lastVals.height = data.height
+          return data.height
+        }
+        case 'speed': {
+          this.lastVals.speed = data.speed
+          return data.speed
+        }
+        case 'position': {
+          this.lastVals.position = data.position
+          return data.position
+        }
+        default: {
+          return ''
+        }
+      }
+    }
+    else {
+      switch (type) {
+        case 'height': {
+          return this.lastVals.height
+        }
+        case 'speed': {
+          return this.lastVals.speed
+        }
+        case 'position': {
+          return this.lastVals.position
+        }
+        default: {
+          return ''
+        }
+      }
+    }
+    return ''
   }
 
   public get_all_quick_com_buttons() {

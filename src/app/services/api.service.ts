@@ -2,9 +2,7 @@ import {Injectable} from '@angular/core';
 import {io} from "socket.io-client";
 import {BackendStatusInterface} from "../util/BackendStatus.interface";
 import {MeasurementInterface, MeasurementMetadata, MeasurementValue} from "../util/Measurement.interface";
-import {publish, timestamp} from "rxjs";
-import {MatDialog} from "@angular/material/dialog";
-import {PrimitiveTypes} from "@angular/cli/src/analytics/analytics-parameters";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +23,9 @@ export class ApiService {
 
   public socket;
 
-  constructor() {
-    this.socket = io("127.0.0.1:5000", {transports: ['websocket']})
-    this.socket.on('connect', () => console.log("connected")
+  constructor(private snackBar: MatSnackBar) {
+    this.socket = io("192.168.4.1:5000", {transports: ['websocket']})
+    this.socket.on('connect', () => console.log("Backend connected")
     )
     this.socket.on('status', (data) => {
       this.statusValue = data
@@ -36,6 +34,9 @@ export class ApiService {
       for (let i = 0; i < data.length; i++) {
         this.measurementValues.push(data[i])
       }
+    })
+    this.socket.on('error', (data) => {
+      this.openSnackbar_success('Error: ' + data)
     })
   }
 
@@ -52,31 +53,50 @@ export class ApiService {
    */
   public start_measuring() {
     this.socket.emit('chart:start:measuring', {timestamp: Math.round(Date.now() / 1000)}, (response: string) => {
-      console.log(response)
+      if (response == 'ok') {
+        this.openSnackbar_success('Messung gestartet')
+      } else {
+        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
+      }
     })
   }
 
   public stop_measuring() {
     this.socket.emit('chart:stop:measuring', (response: string) => {
-      console.log(response)
+      if (response == 'ok') {
+        this.openSnackbar_success('Messung beendet')
+      } else {
+        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
+      }
     })
   }
 
   public start_pause() {
     this.socket.emit('chart:start:pause', (response: string) => {
-      console.log(response)
+      if (response == 'ok') {
+        this.openSnackbar_success('Pause gestartet')
+      } else {
+        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
+      }
     })
   }
 
   public stop_pause() {
     this.socket.emit('chart:stop:pause', (response: string) => {
-      console.log(response)
+      if (response == 'ok') {
+        this.openSnackbar_success('Pause beendet')
+      }
+      else {
+        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
+      }
     })
   }
 
   public add_comment(comment: string) {
     this.socket.emit('chart:add:comment', ({comment: comment}), (response: string) => {
-      console.log(response)
+      if (response == 'ok') {
+        this.openSnackbar_success('Kommentar ' + comment + ' hinzugefügt')
+      }
     })
   }
 
@@ -91,7 +111,6 @@ export class ApiService {
         streedwidth: street_width
       }
     }), (response: string) => {
-      console.log(response)
     })
   }
 
@@ -106,7 +125,6 @@ export class ApiService {
 
   public set_limit_value(limitValue: number) {
     this.socket.emit('chart:set:limitvalue', (limitValue), (response: string) => {
-      console.log(response)
     })
   }
   /**
@@ -214,5 +232,10 @@ export class ApiService {
       return response
     })
   }
+
+  public openSnackbar_success(message: string) {
+    this.snackBar.open(message, 'OK', {duration: 5000, verticalPosition: "top"})
+  }
+
 }
 

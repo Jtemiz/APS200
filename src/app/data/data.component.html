@@ -27,7 +27,7 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Aktionen</th>
       <td mat-cell *matCellDef="let elem">
-        <button mat-icon-button color="regular" [disabled]="elem.distance > 3000" (click)="open_chart_modal(elem)">
+        <button mat-icon-button color="regular" [disabled]="elem.distance > 3000" (click)="open_chart_modal(elem.date)">
           <mat-icon>remove_red_eye</mat-icon>
         </button>
         <button mat-icon-button color="regular" (click)="download_csv(elem.date)">
