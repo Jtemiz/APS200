@@ -25,5 +25,7 @@
 </div>
 <mat-divider></mat-divider>
 <button class="btn btn-primary button-custom" (click)="openCalModal()">Kalibrierung
-  <mat-icon>lock</mat-icon>
+  <mat-icon color="primary" *ngIf="apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>
+  <mat-icon *ngIf="!apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>
 </button>
+

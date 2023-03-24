@@ -17,6 +17,7 @@ export class ApiService {
     CALI_ACTIVE: false,
     CALI_DIST_MES_ACTIVE: false,
     MEASUREMENT_DISTANCE: 0,
+    WATCH_DOG: false
   }
 
   measurementValues: MeasurementValue[] = []
@@ -36,7 +37,10 @@ export class ApiService {
       }
     })
     this.socket.on('error', (data) => {
-      this.openSnackbar_success('Error: ' + data)
+      this.openSnackbar_success('ERROR: ' + data)
+    })
+    this.socket.on('info', (data) => {
+      this.openSnackbar_success('INFO: ' + data)
     })
   }
 
@@ -53,51 +57,23 @@ export class ApiService {
    */
   public start_measuring() {
     this.socket.emit('chart:start:measuring', {timestamp: Math.round(Date.now() / 1000)}, (response: string) => {
-      if (response == 'ok') {
-        this.openSnackbar_success('Messung gestartet')
-      } else {
-        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
-      }
     })
   }
 
   public stop_measuring() {
-    this.socket.emit('chart:stop:measuring', (response: string) => {
-      if (response == 'ok') {
-        this.openSnackbar_success('Messung beendet')
-      } else {
-        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
-      }
-    })
+    this.socket.emit('chart:stop:measuring', (response: string) => {})
   }
 
   public start_pause() {
-    this.socket.emit('chart:start:pause', (response: string) => {
-      if (response == 'ok') {
-        this.openSnackbar_success('Pause gestartet')
-      } else {
-        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
-      }
-    })
+    this.socket.emit('chart:start:pause', (response: string) => {})
   }
 
   public stop_pause() {
-    this.socket.emit('chart:stop:pause', (response: string) => {
-      if (response == 'ok') {
-        this.openSnackbar_success('Pause beendet')
-      }
-      else {
-        this.openSnackbar_success('Ein Fehler ist aufgetreten. Bitte Service kontaktieren')
-      }
-    })
+    this.socket.emit('chart:stop:pause', (response: string) => {})
   }
 
   public add_comment(comment: string) {
-    this.socket.emit('chart:add:comment', ({comment: comment}), (response: string) => {
-      if (response == 'ok') {
-        this.openSnackbar_success('Kommentar ' + comment + ' hinzugefügt')
-      }
-    })
+    this.socket.emit('chart:add:comment', ({comment: comment}), (response: string) => {})
   }
 
   public set_metadata(name: string, user: string, location: string, notes: string, street_width: number) {
@@ -110,8 +86,7 @@ export class ApiService {
         time: Date.now().toPrecision(),
         streedwidth: street_width
       }
-    }), (response: string) => {
-    })
+    }), (response: string) => {})
   }
 
   public async get_limit_value(): Promise<number> {
@@ -127,6 +102,7 @@ export class ApiService {
     this.socket.emit('chart:set:limitvalue', (limitValue), (response: string) => {
     })
   }
+
   /**
    * Data Actions
    */
@@ -153,13 +129,11 @@ export class ApiService {
 
   public delete_table(tableName: string) {
     this.socket.emit('data:delete:table', tableName, (response: string) => {
-      console.log(response)
     })
   }
 
   public update_metadata(tableName: string, name: string, user: string, location: string, notes: string) {
     this.socket.emit('data:set:metadata', ({tableName: tableName, metaData: {name: name, user: user, location: location, notes: notes}}), (response: string) => {
-      console.log(response)
     })
   }
 
@@ -178,19 +152,11 @@ export class ApiService {
 
   public add_quick_com_button(content: string) {
     let socket = this.socket
-    socket.emit('settings:add:commentBtn', (content), (response: string) => {
-      if (response === 'error') {
-        // todo generate toastr
-      }
-    })
+    socket.emit('settings:add:commentBtn', (content), (response: string) => {})
   }
 
   public delete_quick_com_button(content: string) {
-    this.socket.emit('settings:delete:commentBtn', (content), (response: string) => {
-      if (response === 'error') {
-        // todo generate toastr
-      }
-    })
+    this.socket.emit('settings:delete:commentBtn', (content), (response: string) => {})
   }
 
   /**
@@ -236,6 +202,5 @@ export class ApiService {
   public openSnackbar_success(message: string) {
     this.snackBar.open(message, 'OK', {duration: 5000, verticalPosition: "top"})
   }
-
 }
 

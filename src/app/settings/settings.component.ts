@@ -23,7 +23,6 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this.apiService.get_all_quick_com_buttons().then(data => {
       this.commentBtns = data
-      console.log(data)
     })
   }
 

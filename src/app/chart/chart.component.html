@@ -2,7 +2,7 @@
   <canvas id="chart"> {{chart}}</canvas>
 
   <mat-chip-listbox>
-    <mat-chip style="width: 100px">
+    <mat-chip style="width: 100px" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
       <img matChipAvatar src="assets/height-symbol.svg" width="25">
       {{get_digit_measurement_values('height')}}
     </mat-chip>

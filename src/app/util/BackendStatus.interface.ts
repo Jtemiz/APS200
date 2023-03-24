@@ -7,5 +7,6 @@ export interface BackendStatusInterface {
   CALI_ACTIVE: boolean
   CALI_DIST_MES_ACTIVE: false
   MEASUREMENT_DISTANCE: 0
+  WATCH_DOG: boolean
 }
 

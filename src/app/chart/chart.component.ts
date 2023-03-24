@@ -22,9 +22,9 @@ export class ChartComponent implements OnInit {
     scaleID: 'y',
     value: 4,
     borderColor: 'red',
-    borderWidth: 3,
+    borderWidth: 2,
     label: {
-      padding: 10,
+      padding: 5,
       display: true,
       position: 'center',
       content: 'Grenzwert',
@@ -55,11 +55,17 @@ export class ChartComponent implements OnInit {
       plugins: {
         annotation: {
           annotations: {
-            line1: this.chartAnnotationOptions
+            line1: this.chartAnnotationOptions,
+            zeroLine: {
+              type: 'line',
+              scaleID: 'y',
+              value: 0,
+              borderColor: 'black',
+              borderWidth: 1
+            }
           }
         }
       },
-
       title: {
         display: true,
         text: 'Messung'
@@ -80,18 +86,10 @@ export class ChartComponent implements OnInit {
           ticks: {
             stepSize: 5
           }
-        }, /*
-        x: [{
-          scaleLabel: {
-            display: true,
-            labelString: 'Position'
-          },
-          ticks: {
-            autoSkip: true,
-            maxTicksLimit: 100
-          }
-        }]
-        */
+        },
+        x: {
+          gridLines: { lineWidth: 50 },
+        }
       },
       elements: {
         point: {
@@ -188,7 +186,6 @@ export class ChartComponent implements OnInit {
         }
       }
     }
-    return ''
   }
 
   public get_all_quick_com_buttons() {
