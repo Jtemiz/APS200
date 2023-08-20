@@ -8,7 +8,7 @@ import {Chart, registerables} from "chart.js";
   templateUrl: './chart-modal.component.html',
   styleUrls: ['./chart-modal.component.css']
 })
-export class ChartModalComponent implements OnInit{
+export class ChartModalComponent implements OnInit {
   public chart: any
   private chartOptions: any = {
     type: 'line',
@@ -58,11 +58,20 @@ export class ChartModalComponent implements OnInit{
         y: {
           reverse: true,
           max: 30,
-          min: -5,
+          min: -10,
           ticks: {
-            stepSize: 2
-          }
+            stepSize: 5
+          },
         },
+        x: {
+          gridLines: {
+            color: "transparent",
+            display: true,
+            drawBorder: false,
+            zeroLineColor: "#ccc",
+            zeroLineWidth: 1
+          }
+        }
       },
       animation: false,
       elements: {
@@ -76,7 +85,7 @@ export class ChartModalComponent implements OnInit{
   };
 
   constructor(public dialogRef: MatDialogRef<ChartModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { tableName: string},
+              @Inject(MAT_DIALOG_DATA) public data: { tableName: string },
               public apiService: ApiService) {
   }
 
@@ -84,7 +93,7 @@ export class ChartModalComponent implements OnInit{
     Chart.register(...registerables)
     this.chart = new Chart('chart', this.chartOptions)
     this.apiService.get_measurement(this.data.tableName, false).then((values) => {
-      for (let i = 0; i<values.length; i++) {
+      for (let i = 0; i < values.length; i++) {
         this.chart.data.labels.push(values[i][0])
         this.chart.data.datasets[0].data.push(values[i][1])
         this.chart.data.datasets[1].data.push(values[i][4])

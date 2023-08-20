@@ -13,11 +13,12 @@ export class SettingsComponent implements OnInit {
   displayedTableCols = ['content', 'delete']
   commentToAdd = ''
   commentBtns: string[] = []
+  sound_on: boolean;
 
   @ViewChild(MatTable) table: MatTable<string> | undefined;
 
   constructor(public apiService: ApiService, public dialog: MatDialog) {
-
+    this.sound_on = localStorage.getItem('sound_on') != 'false'
   }
 
   ngOnInit() {
@@ -62,5 +63,11 @@ export class SettingsComponent implements OnInit {
         // todo: error handling
       })
     }
+  }
+
+  public toggleSound() {
+    this.sound_on = !this.sound_on
+    localStorage.setItem('sound_on', String(this.sound_on))
+    this.apiService.actualize_sound_on()
   }
 }

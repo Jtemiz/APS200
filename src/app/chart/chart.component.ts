@@ -108,7 +108,7 @@ export class ChartComponent implements OnInit {
   private changeLimitValue() {
     let input = prompt("Grenzwerte ändern", this.chartAnnotationOptions.value + 'mm');
     if (input != undefined) {
-      if ((parseInt(input) < this.chartOptions.options.scales.y.max)) {
+      if ((parseInt(input) < this.chartOptions.options.scales.y.max) && (parseInt(input) > this.chartOptions.options.scales.y.min)) {
         this.apiService.set_limit_value(parseInt(input))
         this.chartAnnotationOptions.value = parseInt(input);
         this.chart.update()
@@ -120,9 +120,10 @@ export class ChartComponent implements OnInit {
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
-    this.interval = setInterval(() => this.updateChart(this.apiService), 500)
+    this.interval = setInterval(() => this.updateChart(this.apiService), 100)
     this.get_all_quick_com_buttons()
     this.get_limit_value()
+    this.apiService.measurementValues = []
   }
 
   public open_metadata_input_dialog() {
@@ -133,19 +134,26 @@ export class ChartComponent implements OnInit {
 
   private updateChart(apiService: ApiService) {
     if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
-      let data = apiService.getMeasurementValues()
-      while (this.chart.data.labels.length > 100) {
-        this.chart.data.labels.shift()
-        this.chart.data.datasets[0].data.shift()
+      let data = apiService.getMeasurementValues();
+
+      // Remove old data if the total length exceeds 100
+      let excessLength = this.chart.data.labels.length + data.length - 100;
+      if (excessLength > 0) {
+        this.chart.data.labels.splice(0, excessLength);
+        this.chart.data.datasets[0].data.splice(0, excessLength);
       }
+
+      // Append new data
       for (let i = 0; i < data.length; i++) {
-        this.chart.data.labels.push(data[i].position)
-        this.chart.data.datasets[0].data.push(data[i].height)
+        this.chart.data.labels.push(data[i].position);
+        this.chart.data.datasets[0].data.push(data[i].height);
       }
-      if (data.length != 0 && this.apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
-        apiService.measurementValues = []
+
+      if (data.length !== 0 && apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
+        apiService.measurementValues = [];
       }
-      this.chart.update()
+
+      this.chart.update();
     }
   }
 
