@@ -54,6 +54,7 @@ export class SettingsComponent implements OnInit {
     if (pwInput != undefined) {
       await this.apiService.getCalibrationSteps(pwInput).then((response) => {
         this.dialog.open(CaliModalComponent, {
+          disableClose: true,
           data: {
             calibrationSteps: response,
             password: pwInput

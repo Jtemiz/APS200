@@ -28,9 +28,12 @@
 </div>
 
 
-<div mat-dialog-actions style="width: 40px" class="d-flex justify-content-between">
-  <button mat-mini-fab color="regular" mat-dialog-close>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="apiService.stopCalibration()">
     <mat-icon>check_circle_outline</mat-icon>
+  </button>
+  <button mat-button mat-dialog-close (click)="apiService.abortCalibration()">
+    <mat-icon>cancel</mat-icon>
   </button>
 </div>
 

@@ -201,6 +201,9 @@ export class ApiService {
     this.socket.emit('settings:stop:calibration')
   }
 
+  public abortCalibration() {
+    this.socket.emit('settings:abort:calibration')
+  }
 
   public setCalibrationStep(step: number, password: string) {
     this.socket.emit('settings:set:calibrationStep', ({step: step, password: password}), (response: string) => {
