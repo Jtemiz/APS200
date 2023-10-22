@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {MeasurementInterface, MeasurementMetadata} from "../util/Measurement.interface";
 import {MatDialog} from "@angular/material/dialog";
@@ -6,9 +6,10 @@ import {MetadataInputComponent} from "../metadata-input/metadata-input.component
 import {ChartModalComponent} from "./chart-modal.component";
 import {MatSort, Sort} from "@angular/material/sort";
 import {MatTableDataSource} from "@angular/material/table";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import _default from "chart.js/dist/plugins/plugin.tooltip";
 import type = _default.defaults.animations.numbers.type;
+import {EvaluationService} from "../services/evaluation/evaluation.service";
 
 @Component({
   selector: 'app-data',
@@ -16,10 +17,13 @@ import type = _default.defaults.animations.numbers.type;
   styleUrls: ['./data.component.css']
 })
 export class DataComponent implements OnInit {
-  constructor(public apiService: ApiService, public dialog: MatDialog) {
+  @Input() inEvaluation: boolean = false
+
+  constructor(public apiService: ApiService, public dialog: MatDialog, public evaluationService: EvaluationService) {
   }
 
-  displayedTableCols: string[] = ['name', 'location', 'distance', 'user', 'measure', 'date', 'actions']
+  displayedTableCols: string[] = ['name', 'location', 'distance', 'user', 'measure', 'date', 'add']
+
   tables: MeasurementMetadata[] = []
 
   dataSource: MatTableDataSource<MeasurementMetadata> = new MatTableDataSource<MeasurementMetadata>()
@@ -28,12 +32,13 @@ export class DataComponent implements OnInit {
     this.apiService.get_all_tables().then(data => {
       this.dataSource.data = data
     })
+    this.displayedTableCols = this.inEvaluation ? ['name', 'location', 'distance', 'user', 'measure', 'date', 'add'] : ['name', 'location', 'distance', 'user', 'measure', 'date', 'actions']
   }
 
   public toDateTime(timestamp: string, forSorting: boolean) {
     const date_object = new Date(Number.parseInt(timestamp) * 1000)
     if (forSorting) {
-      const date = date_object.getFullYear().toString() + '-' + (date_object.getMonth()+1).toString() + '-' + date_object.getDate().toString()
+      const date = date_object.getFullYear().toString() + '-' + (date_object.getMonth() + 1).toString() + '-' + date_object.getDate().toString()
       const time = date_object.getHours().toString() + ':' + date_object.getMinutes().toString() + ':' + date_object.getSeconds().toString()
       return date + '_' + time
     } else {
@@ -88,12 +93,12 @@ export class DataComponent implements OnInit {
     csv_content.metaData = this.dataSource.data.find((elem) => {
       return elem.date == tableName
     })
-    csv = csv.concat('Datum:;'+ this.toDateTime(csv_content.metaData.date, false) + '\r\n')
-    csv = csv.concat('Prüfer:;'+ csv_content.metaData.user + '\r\n')
-    csv = csv.concat('Adresse:;'+ csv_content.metaData.location + '\r\n')
-    csv = csv.concat('Maßnahme:;'+ csv_content.metaData.name + '\r\n')
-    csv = csv.concat('Notizen:;'+ csv_content.metaData.notes + '\r\n')
-    csv = csv.concat('Länge:;'+ csv_content.metaData.distance.toString() + '\r\n\r\n')
+    csv = csv.concat('Datum:;' + this.toDateTime(csv_content.metaData.date, false) + '\r\n')
+    csv = csv.concat('Prüfer:;' + csv_content.metaData.user + '\r\n')
+    csv = csv.concat('Adresse:;' + csv_content.metaData.location + '\r\n')
+    csv = csv.concat('Maßnahme:;' + csv_content.metaData.name + '\r\n')
+    csv = csv.concat('Notizen:;' + csv_content.metaData.notes + '\r\n')
+    csv = csv.concat('Länge:;' + csv_content.metaData.distance.toString() + '\r\n\r\n')
     csv = csv.concat('Station;Höhe;Geschw;Breite;Grenze;Kommentar\r\n')
     for (let i = 0; i < csv_content.measurementValues.length; i++) {
       const row_array = csv_content.measurementValues[i]
@@ -136,6 +141,20 @@ export class DataComponent implements OnInit {
 
     function compare(a: number | string, b: number | string, isAsc: boolean) {
       return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    }
+  }
+
+  public add_to_selected(elem: any) {
+    if (!this.evaluationService.selected_measurements.includes(elem)) {
+      this.evaluationService.selected_measurements.push(elem)
+    }
+  }
+
+  public remove_from_selected(elem: any) {
+    if (this.evaluationService.selected_measurements.includes(elem)) {
+      this.evaluationService.selected_measurements = this.evaluationService.selected_measurements.filter((el) => {
+        return el.date !== elem.date
+      })
     }
   }
 }

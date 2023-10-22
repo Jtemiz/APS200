@@ -13,6 +13,9 @@
     <button mat-icon-button class="navbar-item" routerLink="/settings" routerLinkActive="mat-primary">
       <mat-icon>settings</mat-icon>
     </button>
+    <button mat-icon-button class="navbar-item" routerLink="/evaluation" routerLinkActive="mat-primary">
+      <mat-icon>functions</mat-icon>
+    </button>
     <div>
       <div matTooltip="{{apiService.getStatusValue('BATTERY_LEVEL').toString() + '%'}}" matTooltipPosition="above" class="batteryContainer">
         <div class="batteryOuter"><div id="batteryLevel" style="width:{{apiService.getStatusValue('BATTERY_LEVEL').toString() + '%'}}"></div></div>

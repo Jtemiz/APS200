@@ -1,0 +1,20 @@
+<ng-container>
+  <div id="app-data-container" class="container-fluid">
+    <mat-card>
+      <mat-card-content>Daten auswählen
+        <button style="float: right" *ngIf="!EvaluationService.data_selection_opened" mat-icon-button (click)="this.resize_data_container(false)">
+          <mat-icon>open_in_full</mat-icon>
+        </button>
+        <button style="float: right" *ngIf="EvaluationService.data_selection_opened" mat-icon-button (click)="this.resize_data_container(true)">
+          <mat-icon>close_fullscreen</mat-icon>
+        </button>
+      </mat-card-content>
+    </mat-card>
+    <app-data [inEvaluation]="true"></app-data>
+  </div>
+</ng-container>
+<ng-container>
+  <div id="eval-container" class="container-fluid">
+
+  </div>
+</ng-container>

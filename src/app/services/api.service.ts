@@ -28,8 +28,8 @@ export class ApiService {
   constructor(private snackBar: MatSnackBar) {
     unmuteIosAudio()
     this.actualize_sound_on()
-    this.socket = io("https://192.168.4.1:5000", {transports: ['websocket'], secure:true})
-    //this.socket = io("127.0.0.1:5000", {transports: ['websocket']})
+    //this.socket = io("https://192.168.4.1:5000", {transports: ['websocket'], secure:true})
+    this.socket = io("127.0.0.1:5000", {transports: ['websocket']})
 
     this.socket.on('connect', () => console.log("Backend connected")
     )
