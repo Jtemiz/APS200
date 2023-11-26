@@ -24,6 +24,10 @@
   </table>
 </div>
 <mat-divider></mat-divider>
+
+<button class="btn btn-primary button-custom" (click)="this.toggleSound()">Warnton <mat-icon *ngIf="!sound_on">volume_off</mat-icon> <mat-icon *ngIf="sound_on">volume_up</mat-icon></button>
+
+<mat-divider></mat-divider>
 <button class="btn btn-primary button-custom" (click)="openCalModal()">Kalibrierung
   <mat-icon color="primary" *ngIf="apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>
   <mat-icon *ngIf="!apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>

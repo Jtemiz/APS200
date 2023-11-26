@@ -1,16 +1,19 @@
-import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
-import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, OnInit} from '@angular/core';
+import {EvaluationService} from "../services/evaluation/evaluation.service";
 import {ApiService} from "../services/api.service";
-import {Chart, registerables} from "chart.js";
+import {Chart, ChartOptions, registerables} from "chart.js";
 
 @Component({
-  selector: 'app-chart-modal',
-  templateUrl: './chart-modal.component.html',
-  styleUrls: ['./chart-modal.component.css']
+  selector: 'app-evaluation',
+  templateUrl: './evaluation.component.html',
+  styleUrls: ['./evaluation.component.css']
 })
-export class ChartModalComponent implements OnInit {
-  public chart: any
-  private chartOptions: any = {
+export class EvaluationComponent implements OnInit {
+  constructor(public EvaluationService: EvaluationService, public apiService: ApiService) {
+  }
+
+  public charts: Chart[] = []
+  public chartOptions: any = {
     type: 'line',
     data: {
       labels: [],
@@ -84,23 +87,25 @@ export class ChartModalComponent implements OnInit {
     },
   };
 
-  constructor(public dialogRef: MatDialogRef<ChartModalComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { tableName: string },
-              public apiService: ApiService) {
-  }
-
   ngOnInit(): void {
     Chart.register(...registerables)
-    this.chart = new Chart('chart', this.chartOptions)
-    this.apiService.get_measurement(this.data.tableName, false).then((values) => {
-      for (let i = 0; i < values.length; i++) {
-        this.chart.data.labels.push(values[i][0])
-        this.chart.data.datasets[0].data.push(values[i][1])
-        this.chart.data.datasets[1].data.push(values[i][4])
-        this.chart.data.datasets[2].data.push(values[i][3])
-        this.chart.data.datasets[3].data.push(values[i][2])
+    for (let measurement of this.EvaluationService.selected_measurements) {
+      console.log(measurement.date)
+      this.charts.push(new Chart(measurement.date, this.chartOptions))
+    }
+  }
+  public resize_data_container(to_small: boolean) {
+    // @ts-ignore
+    if (document.getElementById('app-data-container') != null) {
+      if (to_small) {
+        // @ts-ignore
+        document.getElementById('app-data-container').style.height = '100px'
+        this.EvaluationService.data_selection_opened = false
+      } else {
+        // @ts-ignore
+        document.getElementById('app-data-container').style.height = '100%'
+        this.EvaluationService.data_selection_opened = true
       }
-      this.chart.update()
-    })
+    }
   }
 }

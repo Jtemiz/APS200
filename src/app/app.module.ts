@@ -24,6 +24,8 @@ import { ChartModalComponent } from './data/chart-modal.component';
 import { CaliModalComponent } from './settings/cali-modal/cali-modal.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { EvaluationComponent } from './evaluation/evaluation.component';
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -33,27 +35,29 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     DataComponent,
     MetadataInputComponent,
     ChartModalComponent,
-    CaliModalComponent
+    CaliModalComponent,
+    EvaluationComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatSidenavModule,
-        MatListModule,
-        MatIconModule,
-        MatButtonModule,
-        MatToolbarModule,
-        MatTableModule,
-        MatSortModule,
-        MatFormFieldModule,
-        MatInputModule,
-        FormsModule,
-        MatDialogModule,
-        MatTooltipModule,
-        MatChipsModule,
-        MatSnackBarModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatChipsModule,
+    MatSnackBarModule,
+    MatCardModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
