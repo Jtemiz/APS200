@@ -1,4 +1,3 @@
-<ng-container>
   <div id="app-data-container" class="container-fluid">
     <mat-card>
       <mat-card-content>Daten auswählen
@@ -12,9 +11,8 @@
     </mat-card>
     <app-data [inEvaluation]="true"></app-data>
   </div>
-</ng-container>
-<ng-container>
   <div id="eval-container" class="container-fluid">
-
+    <ng-container *ngFor="let chart of this.charts">
+    <canvas id="{{chart.id}}">{{chart}}</canvas>
+    </ng-container>
   </div>
-</ng-container>

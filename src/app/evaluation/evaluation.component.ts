@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {EvaluationService} from "../services/evaluation/evaluation.service";
 import {ApiService} from "../services/api.service";
-import {Chart, registerables} from "chart.js";
+import {Chart, ChartOptions, registerables} from "chart.js";
 
 @Component({
   selector: 'app-evaluation',
@@ -12,16 +12,7 @@ export class EvaluationComponent implements OnInit {
   constructor(public EvaluationService: EvaluationService, public apiService: ApiService) {
   }
 
-  inputParent: number = 2
-  ngOnInit(): void {
-    Chart.register(...registerables)
-    for (let measurement of this.EvaluationService.selected_measurements) {
-      this.charts.push(new Chart(measurement.date, this.chartOptions))
-    }
-
-  }
-  public charts: any[] = []
-  public chart: any
+  public charts: Chart[] = []
   public chartOptions: any = {
     type: 'line',
     data: {
@@ -96,6 +87,13 @@ export class EvaluationComponent implements OnInit {
     },
   };
 
+  ngOnInit(): void {
+    Chart.register(...registerables)
+    for (let measurement of this.EvaluationService.selected_measurements) {
+      console.log(measurement.date)
+      this.charts.push(new Chart(measurement.date, this.chartOptions))
+    }
+  }
   public resize_data_container(to_small: boolean) {
     // @ts-ignore
     if (document.getElementById('app-data-container') != null) {
