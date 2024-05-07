@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('node_modules/bootstrap/dist/css/bootstrap.css');
+
 :root {
   --font-color-regular: #000000;
+  --font-scale: 1;
   --background-color: rgba(0, 0, 0, 0.09);
   --content-container-color: #f3f3f4;
   --header-background-color: rgba(0, 0, 0, 0.09);
@@ -10,13 +12,19 @@
 }
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 
 .button-custom {
   margin-bottom: 10px;
-  font-size: 15px;
+  font-size: calc(var(--font-scale) * 15px);
   border: var(--startStop-button-color-regular) solid 3px;
   background: var(--startStop-button-color-regular);
   height: max(44px, fit-content);
@@ -35,11 +43,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   src: url(assets/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
 }
 
+
 .material-icons {
+  transform: scale(var(--font-scale));
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
@@ -49,4 +58,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   direction: ltr;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+
+.mdc-data-table__header-cell, .mat-mdc-cell, .mat-mdc-form-field, .ng-tns-c81-0 {
+  font-size: calc(var(--font-scale) * 15px) !important;
+}
+
+.chip-custom {
+  justify-content: center;
+  width: 130px;
+  font-size: calc(var(--font-scale) * 12px);
 }

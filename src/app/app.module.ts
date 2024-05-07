@@ -26,6 +26,7 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { EvaluationComponent } from './evaluation/evaluation.component';
 import {MatCardModule} from "@angular/material/card";
+import {MatSliderModule} from "@angular/material/slider";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {MatCardModule} from "@angular/material/card";
     MatTooltipModule,
     MatChipsModule,
     MatSnackBarModule,
-    MatCardModule
+    MatCardModule,
+    MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

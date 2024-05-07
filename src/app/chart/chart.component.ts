@@ -17,6 +17,7 @@ export class ChartComponent implements OnInit {
   public chart: any
   public quickComBtns: string[] = []
   public quickComToAdd: string = ''
+  private chartValueAmount: number = 5
   private chartAnnotationOptions = {
     type: 'line',
     scaleID: 'y',
@@ -28,7 +29,10 @@ export class ChartComponent implements OnInit {
       display: true,
       position: 'center',
       content: 'Grenzwert',
-      backgroundColor: 'red'
+      backgroundColor: 'red',
+      font: {
+        size: (size: number) => 12 * Number((!localStorage.getItem('fontSizeValue')? 1 : localStorage.getItem('fontSizeValue')))
+      },
     },
     click: () => this.changeLimitValue()
   }
@@ -64,6 +68,9 @@ export class ChartComponent implements OnInit {
               borderWidth: 1
             }
           }
+        },
+        legend: {
+          display: false
         }
       },
       title: {
@@ -84,8 +91,11 @@ export class ChartComponent implements OnInit {
           max: 30,
           min: -10,
           ticks: {
+            font: {
+              size: (size: number) => 12 * Number((!localStorage.getItem('fontSizeValue')? 1 : localStorage.getItem('fontSizeValue')))
+            },
             stepSize: 5
-          }
+          },
         },
         x: {
           gridLines: { lineWidth: 50 },
@@ -102,6 +112,7 @@ export class ChartComponent implements OnInit {
   };
 
   constructor(public apiService: ApiService, public dialog: MatDialog) {
+    console.log('constructor')
   }
 
 
@@ -117,6 +128,8 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.chartValueAmount = this.getChartValueAmount()
+    this.apiService.resetMeasurementValues()
     Chart.register(...registerables)
     Chart.register(annotationPlugin)
     this.chart = new Chart('chart', this.chartOptions)
@@ -124,6 +137,7 @@ export class ChartComponent implements OnInit {
     this.get_all_quick_com_buttons()
     this.get_limit_value()
     this.apiService.measurementValues = []
+
   }
 
   public open_metadata_input_dialog() {
@@ -135,9 +149,9 @@ export class ChartComponent implements OnInit {
   private updateChart(apiService: ApiService) {
     if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
       let data = apiService.getMeasurementValues();
-
-      // Remove old data if the total length exceeds 100
-      let excessLength = this.chart.data.labels.length + data.length - 100;
+      // Remove old data if the total length exceeds certain amount (default: 50)
+      let excessLength = this.chart.data.labels.length + data.length - this.chartValueAmount*10;
+      console.log(this.chartValueAmount)
       if (excessLength > 0) {
         this.chart.data.labels.splice(0, excessLength);
         this.chart.data.datasets[0].data.splice(0, excessLength);
@@ -152,7 +166,7 @@ export class ChartComponent implements OnInit {
       if (data.length !== 0 && apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
         apiService.measurementValues = [];
       }
-
+      console.log(this.chart.data.labels.length)
       this.chart.update();
     }
   }
@@ -216,4 +230,13 @@ export class ChartComponent implements OnInit {
       this.chart.update()
     })
   }
+
+  public getFontSizeValue(): number {
+    return Number(localStorage.getItem('fontSizeValue')) || 1
+  }
+
+  public getChartValueAmount(): number {
+    return Number(localStorage.getItem('chartValueAmount')) || 5
+  }
+
 }

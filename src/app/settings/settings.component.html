@@ -1,5 +1,5 @@
-<mat-form-field>
-  <mat-label>Kommentar hinzufügen</mat-label>
+<mat-form-field class="form-field-custom">
+  <mat-label>Neuer Kommentar</mat-label>
   <input matInput placeholder="Kommentarinhalt" (keydown.enter)="addCommentBtn()" [(ngModel)]="commentToAdd">
   <button mat-button matSuffix (click)="addCommentBtn()">
     <mat-icon>save</mat-icon>
@@ -23,6 +23,23 @@
     <tr mat-row *matRowDef="let row; columns: displayedTableCols;"></tr>
   </table>
 </div>
+
+
+<mat-divider></mat-divider>
+<div class="btn btn-primary button-custom">
+  <p>Angezeigter Messbereich in Meter</p>
+  <mat-slider color="warn" discrete class="slider-custom"  [showTickMarks]="true"  [min]="0.2" [max]="10" [step]="0.1" (change)="updateChartValueAmount(chartValueAmount)">
+    <input matSliderThumb [(ngModel)]="chartValueAmount" #chartValueAmountSlider>
+  </mat-slider>
+</div>
+<mat-divider></mat-divider>
+<div class="btn btn-primary button-custom">
+  <p>Schriftgröße</p>
+  <mat-slider color="warn" discrete class="slider-custom"  [showTickMarks]="true"  [min]="0.1" [max]="2" [step]="0.1" (change)="updateFontSize(fontSizeValue)">
+    <input matSliderThumb [(ngModel)]="fontSizeValue" #fontSizeSlider>
+  </mat-slider>
+</div>
+
 <mat-divider></mat-divider>
 
 <button class="btn btn-primary button-custom" (click)="this.toggleSound()">Warnton <mat-icon *ngIf="!sound_on">volume_off</mat-icon> <mat-icon *ngIf="sound_on">volume_up</mat-icon></button>
@@ -32,4 +49,5 @@
   <mat-icon color="primary" *ngIf="apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>
   <mat-icon *ngIf="!apiService.getStatusValue('WATCH_DOG')">lock</mat-icon>
 </button>
+
 

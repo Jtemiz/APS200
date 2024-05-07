@@ -1,5 +1,5 @@
 <div class="table-container">
-  <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8">
+  <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8 table-custom">
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Name</th>
       <td mat-cell *matCellDef="let elem">{{elem.name}}</td>

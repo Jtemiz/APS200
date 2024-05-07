@@ -1,8 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {MatTable} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
 import {CaliModalComponent} from "./cali-modal/cali-modal.component";
+import {MatSlider} from "@angular/material/slider";
 
 @Component({
   selector: 'app-settings',
@@ -14,6 +15,8 @@ export class SettingsComponent implements OnInit {
   commentToAdd = ''
   commentBtns: string[] = []
   sound_on: boolean;
+  fontSizeValue: number = 1;
+  chartValueAmount: number = 5;
 
   @ViewChild(MatTable) table: MatTable<string> | undefined;
 
@@ -25,6 +28,8 @@ export class SettingsComponent implements OnInit {
     this.apiService.get_all_quick_com_buttons().then(data => {
       this.commentBtns = data
     })
+    this.fontSizeValue = this.getFontSizeValue()
+    this.chartValueAmount = this.getChartValueAmount()
   }
 
   public addCommentBtn() {
@@ -66,9 +71,29 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  public updateChartValueAmount(value: number) {
+    console.log(value)
+    localStorage.setItem('chartValueAmount', value.toString())
+  }
+
   public toggleSound() {
     this.sound_on = !this.sound_on
     localStorage.setItem('sound_on', String(this.sound_on))
     this.apiService.actualize_sound_on()
   }
+
+  public updateFontSize(value: number = 1) {
+    document.documentElement.style.setProperty('--font-scale', value.toString());
+    localStorage.setItem('fontSizeValue', value.toString())
+    console.log(value)
+  }
+
+  getFontSizeValue(): number {
+    return Number(localStorage.getItem('fontSizeValue')) || 1
+  }
+
+  getChartValueAmount(): number {
+    return Number(localStorage.getItem('chartValueAmount')) || 5
+  }
 }
+

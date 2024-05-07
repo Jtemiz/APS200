@@ -35,26 +35,27 @@ Battery-Styles
   flex-direction: row;
   align-items: center;
   margin-right: 30px;
+  height: 44px;
 }
 
 .batteryOuter {
-  border-radius: 3px;
-  border: 1px solid #444;
-  padding: 1px;
-  width: 40px;
-  height: 20px;
+  border-radius: calc(3px * var(--font-scale));
+  border: calc(1px * var(--font-scale)) solid #444;
+  padding: calc(1px * var(--font-scale));
+  width: calc(40px * var(--font-scale));
+  height: calc(20px * var(--font-scale));
 }
 
 .batteryBump {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--font-scale));
   background-color: #444;
-  margin: 1px;
-  width: 2px;
-  height: 6px;
+  margin: calc(1px * var(--font-scale));
+  width: calc(2px * var(--font-scale));
+  height: calc(6px * var(--font-scale));
 }
 
 #batteryLevel {
-  border-radius: 2px;
+  border-radius: calc(2px * var(--font-scale));
   background-color: #73AD21;
-  height:16px;
+  height: calc(16px * var(--font-scale));
 }

@@ -63,6 +63,9 @@ export class ApiService {
     return this.measurementValues
   }
 
+  resetMeasurementValues() {
+    this.measurementValues = []
+  }
   /**
    * Chart Actions
    */

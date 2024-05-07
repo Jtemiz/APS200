@@ -2,15 +2,15 @@
   <canvas id="chart"> {{chart}}</canvas>
 
   <mat-chip-listbox>
-    <mat-chip style="width: 100px" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
-      <img matChipAvatar src="assets/height-symbol.svg" width="25">
+    <mat-chip class="chip-custom" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+      <img matChipAvatar src="assets/height-symbol.svg" width="{{25 * this.getFontSizeValue()}}">
       {{get_digit_measurement_values('height')}}
     </mat-chip>
-    <mat-chip style="width: 100px" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
-      <img matChipAvatar src="assets/distance-symbol.svg" width="25">
+    <mat-chip class="chip-custom" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+      <img matChipAvatar src="assets/distance-symbol.svg" width="{{25 * this.getFontSizeValue()}}">
       {{get_digit_measurement_values('position') }}
     </mat-chip>
-    <mat-chip style="width: 100px" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
+    <mat-chip class="chip-custom" *ngIf="this.apiService.getStatusValue('MEASUREMENT_ACTIVE')">
       <mat-icon matChipAvatar>speed</mat-icon>
       {{ get_digit_measurement_values('speed') }}
     </mat-chip>
