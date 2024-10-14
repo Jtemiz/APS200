@@ -53,7 +53,14 @@ export class ChartComponent implements OnInit {
         borderColor: 'rgb(255, 99, 132)',
         data: [],
         fill: false,
-      }],
+      },
+        {
+          type: 'bar',
+          label: 'Bar Dataset',
+          data: [],
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)'
+        }],
     },
     options: {
       plugins: {
@@ -147,11 +154,10 @@ export class ChartComponent implements OnInit {
   }
 
   private updateChart(apiService: ApiService) {
-    if (apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
+    if (apiService.getStatusValue('MEASUREMENT_ACTIVE') && this.chartValueAmount > 0) {
       let data = apiService.getMeasurementValues();
       // Remove old data if the total length exceeds certain amount (default: 50)
       let excessLength = this.chart.data.labels.length + data.length - this.chartValueAmount*10;
-      console.log(this.chartValueAmount)
       if (excessLength > 0) {
         this.chart.data.labels.splice(0, excessLength);
         this.chart.data.datasets[0].data.splice(0, excessLength);
@@ -166,9 +172,21 @@ export class ChartComponent implements OnInit {
       if (data.length !== 0 && apiService.getStatusValue('MEASUREMENT_ACTIVE')) {
         apiService.measurementValues = [];
       }
-      console.log(this.chart.data.labels.length)
       this.chart.update();
     }
+    else if (this.chartValueAmount <= 0) {
+      let data = apiService.getMeasurementValues();
+      if (data.length > 0) {
+        this.chart.data.labels = [data[data.length - 1].position];
+        this.chart.data.datasets[1].data = [data[data.length - 1].height];
+        console.log(data[data.length - 1])
+        this.chart.update()
+      }
+    }
+  }
+
+  public updateBarChart() {
+
   }
 
   public get_digit_measurement_values(type: string): any {
